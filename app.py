@@ -6,10 +6,11 @@ import os
 
 HF_TOKEN = os.getenv("HF_APITOKEN")
 
-API_URL = "https://router.huggingface.co/hf-inference/models/google/flan-t5-large"
+API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-large"
 
 headers = {
-    "Authorization": f"Bearer {HF_TOKEN}"
+    "Authorization": f"Bearer {HF_TOKEN}",
+    "Content-Type": "application/json"
 }
 
 def query(payload):
