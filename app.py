@@ -1,38 +1,26 @@
 import streamlit as st
-import requests
 from gtts import gTTS
-import os
+import random
 
+st.title("🌍 Multilingual AI Voice Chatbot")
 
-HF_TOKEN = os.getenv("HF_APITOKEN")
-
-API_URL = "https://router.huggingface.co/hf-inference/models/google/flan-t5-base"
-
-headers = {
-    "Authorization": f"Bearer {HF_TOKEN}",
-    "Content-Type": "application/json"
-}
-
-def query(payload):
-    response = requests.post(API_URL, headers=headers, json=payload)
-    return response.json()
+user_input = st.text_input("Enter your message (Any Language):")
 
 def generate_reply(text):
-    output = query({"inputs": text})
-    
-    if isinstance(output, list):
-        return output[0].get("generated_text", "No response generated.")
-    else:
-        return "Error from AI: " + str(output)
+    responses = [
+        "That's interesting!",
+        "Can you tell me more?",
+        "I understand what you're saying.",
+        "That sounds great!",
+        "Let me think about that.",
+        "Here is what I believe about it."
+    ]
+    return random.choice(responses)
 
 def speak(text):
     tts = gTTS(text=text)
     tts.save("reply.mp3")
     return "reply.mp3"
-
-st.title("🌍 Multilingual AI Voice Chatbot")
-
-user_input = st.text_input("Enter your message (Any Language):")
 
 if st.button("Send"):
     if user_input:
@@ -43,7 +31,3 @@ if st.button("Send"):
         st.audio(audio_file)
     else:
         st.warning("Please enter a message.")
-
-
-
-
