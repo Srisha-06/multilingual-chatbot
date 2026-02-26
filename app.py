@@ -6,7 +6,7 @@ import os
 
 HF_TOKEN = os.getenv("HF_TOKEN")
 
-API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-large"
+API_URL = "https://router.huggingface.co/hf-inference/models/google/flan-t5-large"
 
 headers = {
     "Authorization": f"Bearer {HF_TOKEN}"
@@ -42,4 +42,5 @@ if st.button("Send"):
         st.audio(audio_file)
     else:
         st.warning("Please enter a message.")
+
 
