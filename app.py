@@ -2,29 +2,27 @@ import streamlit as st
 import requests
 from gtts import gTTS
 
-HF_TOKEN = st.secrets["HF_TOKEN"]
+API_KEY = st.secrets["OPENROUTER_API_KEY"]
 
-API_URL = "https://router.huggingface.co/hf-inference/models/microsoft/DialoGPT-medium"
+API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 headers = {
-    "Authorization": f"Bearer {HF_TOKEN}",
+    "Authorization": f"Bearer {API_KEY}",
     "Content-Type": "application/json"
 }
 
-def generate_reply(text):
+def generate_reply(user_input):
     payload = {
-        "inputs": text,
-        "parameters": {
-            "max_new_tokens": 100
-        }
+        "model": "mistralai/mistral-7b-instruct",
+        "messages": [
+            {"role": "user", "content": user_input}
+        ]
     }
+
     response = requests.post(API_URL, headers=headers, json=payload)
     result = response.json()
 
-    if isinstance(result, list):
-        return result[0]["generated_text"]
-    else:
-        return str(result)
+    return result["choices"][0]["message"]["content"]
 
 def speak(text):
     tts = gTTS(text=text)
