@@ -4,7 +4,7 @@ from gtts import gTTS
 import os
 
 
-HF_TOKEN = os.getenv("HF_TOKEN")
+HF_TOKEN = os.getenv("HF_APITOKEN")
 
 API_URL = "https://router.huggingface.co/hf-inference/models/google/flan-t5-large"
 
@@ -42,5 +42,6 @@ if st.button("Send"):
         st.audio(audio_file)
     else:
         st.warning("Please enter a message.")
+
 
 
