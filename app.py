@@ -1,26 +1,39 @@
 import streamlit as st
+import requests
 from gtts import gTTS
-import random
 
-st.title("🌍 Multilingual AI Voice Chatbot")
+HF_TOKEN = st.secrets["HF_TOKEN"]
 
-user_input = st.text_input("Enter your message (Any Language):")
+API_URL = "https://router.huggingface.co/hf-inference/models/microsoft/DialoGPT-medium"
+
+headers = {
+    "Authorization": f"Bearer {HF_TOKEN}",
+    "Content-Type": "application/json"
+}
 
 def generate_reply(text):
-    responses = [
-        "That's interesting!",
-        "Can you tell me more?",
-        "I understand what you're saying.",
-        "That sounds great!",
-        "Let me think about that.",
-        "Here is what I believe about it."
-    ]
-    return random.choice(responses)
+    payload = {
+        "inputs": text,
+        "parameters": {
+            "max_new_tokens": 100
+        }
+    }
+    response = requests.post(API_URL, headers=headers, json=payload)
+    result = response.json()
+
+    if isinstance(result, list):
+        return result[0]["generated_text"]
+    else:
+        return str(result)
 
 def speak(text):
     tts = gTTS(text=text)
     tts.save("reply.mp3")
     return "reply.mp3"
+
+st.title("🌍 Multilingual AI Voice Chatbot")
+
+user_input = st.text_input("Enter your message (Any Language):")
 
 if st.button("Send"):
     if user_input:
@@ -29,5 +42,3 @@ if st.button("Send"):
 
         audio_file = speak(reply)
         st.audio(audio_file)
-    else:
-        st.warning("Please enter a message.")
