@@ -18,7 +18,11 @@ def query(payload):
 
 def generate_reply(text):
     output = query({"inputs": text})
-    return output[0]["generated_text"]
+    
+    if isinstance(output, list):
+        return output[0].get("generated_text", "No response generated.")
+    else:
+        return "Error from AI: " + str(output)
 
 def speak(text):
     tts = gTTS(text=text)
@@ -38,3 +42,4 @@ if st.button("Send"):
         st.audio(audio_file)
     else:
         st.warning("Please enter a message.")
+
