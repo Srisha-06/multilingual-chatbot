@@ -10,20 +10,16 @@ headers = {
     "Content-Type": "application/json"
 }
 
-def generate_reply(user_input):
+def generate_reply(user_input, language):
 
-    system_prompt = """
-You are a smart multilingual AI assistant.
+    system_prompt = f"""
+    You are a multilingual AI assistant.
 
-STRICT RULES:
-- Reply in the SAME language as the user's message.
-- Do NOT mention language detection.
-- Do NOT translate into multiple languages.
-- Do NOT explain what language it is.
-- Give the answer directly.
-- Respond in ONE language only.
-- Keep answers clear and short.
-"""
+    IMPORTANT:
+    - Always reply ONLY in {language}.
+    - Do NOT use any other language.
+    - Keep answers clear and short.
+    """
 
     payload = {
         "model": "llama-3.1-8b-instant",
@@ -40,7 +36,6 @@ STRICT RULES:
         return result["choices"][0]["message"]["content"]
     else:
         return f"Error: {result}"
-
 def speak(text):
     tts = gTTS(text=text)
     tts.save("reply.mp3")
@@ -89,10 +84,14 @@ st.markdown("<p style='text-align: center;'>Real-time AI assistant with multilin
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+language = st.selectbox(
+    "🌐 Select reply language",
+    ["English", "Tamil", "Hindi", "Telugu", "Spanish"]
+)
 user_input = st.text_input("Enter your message (Any Language):")
 
 if st.button("Send") and user_input:
-    reply = generate_reply(user_input)
+    reply = generate_reply(user_input, language)
 
     st.session_state.messages.append(("You", user_input))
     st.session_state.messages.append(("AI", reply))
@@ -106,5 +105,6 @@ for sender, message in st.session_state.messages:
         st.markdown(f'<div class="user-bubble">🧑 {message}</div>', unsafe_allow_html=True)
     else:
         st.markdown(f'<div class="ai-bubble">🤖 {message}</div>', unsafe_allow_html=True)
+
 
 
