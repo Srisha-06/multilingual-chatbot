@@ -13,13 +13,12 @@ headers = {
 def generate_reply(user_input):
 
     system_prompt = """
-    You are a multilingual assistant.
-    1. Detect the language of the user's message.
-    2. Respond in the SAME language.
-    3. If the user asks in Tamil, reply in Tamil.
-    4. If Hindi, reply in Hindi.
-    5. If English, reply in English.
-    """
+You are a professional multilingual AI assistant.
+- Detect the language automatically.
+- Reply in the SAME language.
+- Give clear and short answers.
+- Be polite and helpful.
+"""
 
     payload = {
         "model": "llama-3.1-8b-instant",
@@ -43,13 +42,34 @@ def speak(text):
     return "reply.mp3"
 
 st.title("🌍 Multilingual AI Voice Chatbot")
+st.markdown("""
+### 🔹 Project Description
+This project is a Multilingual AI Voice Chatbot.
+It can:
+- Understand multiple languages
+- Reply in the same language
+- Convert text response to voice
+- Work in real-time using LLM
+
+Technology Used:
+- Groq API (LLaMA 3.1 Model)
+- Streamlit (Frontend)
+- gTTS (Text-to-Speech)
+""")
+
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
 user_input = st.text_input("Enter your message (Any Language):")
 
-if st.button("Send"):
-    if user_input:
-        reply = generate_reply(user_input)
-        st.write("🤖 AI Reply:", reply)
+if st.button("Send") and user_input:
+    reply = generate_reply(user_input)
+    
+    st.session_state.messages.append(("You", user_input))
+    st.session_state.messages.append(("AI", reply))
 
-        audio_file = speak(reply)
-        st.audio(audio_file)
+for sender, message in st.session_state.messages:
+    if sender == "You":
+        st.markdown(f"🧑 **You:** {message}")
+    else:
+        st.markdown(f"🤖 **AI:** {message}")
