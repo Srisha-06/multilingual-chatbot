@@ -13,12 +13,13 @@ headers = {
 def generate_reply(user_input):
 
     system_prompt = """
-You are a professional multilingual AI assistant.
-- Detect the language automatically.
-- Reply in the SAME language.
-- Give clear and short answers.
-- Be polite and helpful.
-"""
+    You are a multilingual assistant.
+    1. Detect the language of the user's message.
+    2. Respond in the SAME language.
+    3. If the user asks in Tamil, reply in Tamil.
+    4. If Hindi, reply in Hindi.
+    5. If English, reply in English.
+    """
 
     payload = {
         "model": "llama-3.1-8b-instant",
@@ -73,3 +74,4 @@ for sender, message in st.session_state.messages:
         st.markdown(f"🧑 **You:** {message}")
     else:
         st.markdown(f"🤖 **AI:** {message}")
+
