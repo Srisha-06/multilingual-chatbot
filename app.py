@@ -13,13 +13,16 @@ headers = {
 def generate_reply(user_input):
 
     system_prompt = """
-    You are a multilingual assistant.
-    1. Detect the language of the user's message.
-    2. Respond in the SAME language.
-    3. If the user asks in Tamil, reply in Tamil.
-    4. If Hindi, reply in Hindi.
-    5. If English, reply in English.
-    """
+You are a multilingual AI assistant.
+
+IMPORTANT RULES:
+1. Detect the language of the user's message.
+2. Reply ONLY in that language.
+3. Do NOT translate into other languages.
+4. Do NOT give the answer in multiple languages.
+5. Give the response in a single language only — the user's language.
+6. Keep the answer clear and short.
+"""
 
     payload = {
         "model": "llama-3.1-8b-instant",
@@ -102,3 +105,4 @@ for sender, message in st.session_state.messages:
         st.markdown(f'<div class="user-bubble">🧑 {message}</div>', unsafe_allow_html=True)
     else:
         st.markdown(f'<div class="ai-bubble">🤖 {message}</div>', unsafe_allow_html=True)
+
