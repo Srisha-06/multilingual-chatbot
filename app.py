@@ -43,20 +43,6 @@ def speak(text):
     return "reply.mp3"
 
 st.title("🌍 Multilingual AI Voice Chatbot")
-st.markdown("""
-### 🔹 Project Description
-This project is a Multilingual AI Voice Chatbot.
-It can:
-- Understand multiple languages
-- Reply in the same language
-- Convert text response to voice
-- Work in real-time using LLM
-
-Technology Used:
-- Groq API (LLaMA 3.1 Model)
-- Streamlit (Frontend)
-- gTTS (Text-to-Speech)
-""")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -65,13 +51,16 @@ user_input = st.text_input("Enter your message (Any Language):")
 
 if st.button("Send") and user_input:
     reply = generate_reply(user_input)
-    
+
     st.session_state.messages.append(("You", user_input))
     st.session_state.messages.append(("AI", reply))
+
+    # 🔊 Generate voice
+    audio_file = speak(reply)
+    st.audio(audio_file)
 
 for sender, message in st.session_state.messages:
     if sender == "You":
         st.markdown(f"🧑 **You:** {message}")
     else:
         st.markdown(f"🤖 **AI:** {message}")
-
