@@ -13,15 +13,16 @@ headers = {
 def generate_reply(user_input):
 
     system_prompt = """
-You are a multilingual AI assistant.
+You are a smart multilingual AI assistant.
 
-IMPORTANT RULES:
-1. Detect the language of the user's message.
-2. Reply ONLY in that language.
-3. Do NOT translate into other languages.
-4. Do NOT give the answer in multiple languages.
-5. Give the response in a single language only — the user's language.
-6. Keep the answer clear and short.
+STRICT RULES:
+- Reply in the SAME language as the user's message.
+- Do NOT mention language detection.
+- Do NOT translate into multiple languages.
+- Do NOT explain what language it is.
+- Give the answer directly.
+- Respond in ONE language only.
+- Keep answers clear and short.
 """
 
     payload = {
@@ -105,4 +106,5 @@ for sender, message in st.session_state.messages:
         st.markdown(f'<div class="user-bubble">🧑 {message}</div>', unsafe_allow_html=True)
     else:
         st.markdown(f'<div class="ai-bubble">🤖 {message}</div>', unsafe_allow_html=True)
+
 
