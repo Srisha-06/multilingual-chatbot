@@ -2,9 +2,10 @@ import streamlit as st
 import requests
 from gtts import gTTS
 
-API_KEY = st.secrets["OPENROUTER_API_KEY"]
+# Load API key from secrets
+API_KEY = st.secrets["GROQ_API_KEY"]
 
-API_URL = "https://openrouter.ai/api/v1/chat/completions"
+API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 headers = {
     "Authorization": f"Bearer {API_KEY}",
@@ -13,7 +14,7 @@ headers = {
 
 def generate_reply(user_input):
     payload = {
-        "model": "mistralai/mistral-7b-instruct",
+        "model": "llama3-8b-8192",
         "messages": [
             {"role": "user", "content": user_input}
         ]
@@ -22,7 +23,10 @@ def generate_reply(user_input):
     response = requests.post(API_URL, headers=headers, json=payload)
     result = response.json()
 
-    return result["choices"][0]["message"]["content"]
+    if "choices" in result:
+        return result["choices"][0]["message"]["content"]
+    else:
+        return f"Error: {result}"
 
 def speak(text):
     tts = gTTS(text=text)
