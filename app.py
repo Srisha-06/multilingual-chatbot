@@ -1,8 +1,9 @@
 import streamlit as st
 import requests
 from gtts import gTTS
+from googletrans import Translator
 
-# Load API key from secrets
+# Load API key
 API_KEY = st.secrets["GROQ_API_KEY"]
 
 API_URL = "https://api.groq.com/openai/v1/chat/completions"
@@ -12,19 +13,32 @@ headers = {
     "Content-Type": "application/json"
 }
 
+translator = Translator()
+
 def generate_reply(user_input):
+    # Detect language
+    detected = translator.detect(user_input)
+    user_lang = detected.lang
+
+    # Translate user input to English
+    translated_input = translator.translate(user_input, dest="en").text
+
     payload = {
-    "model": "llama-3.1-8b-instant",
-    "messages": [
-        {"role": "user", "content": user_input}
-    ]
-}
+        "model": "llama-3.1-8b-instant",
+        "messages": [
+            {"role": "user", "content": translated_input}
+        ]
+    }
 
     response = requests.post(API_URL, headers=headers, json=payload)
     result = response.json()
 
     if "choices" in result:
-        return result["choices"][0]["message"]["content"]
+        ai_reply_en = result["choices"][0]["message"]["content"]
+
+        # Translate reply back to user's language
+        final_reply = translator.translate(ai_reply_en, dest=user_lang).text
+        return final_reply
     else:
         return f"Error: {result}"
 
@@ -44,5 +58,3 @@ if st.button("Send"):
 
         audio_file = speak(reply)
         st.audio(audio_file)
-
-
