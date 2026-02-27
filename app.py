@@ -17,7 +17,7 @@ def generate_reply(user_input, language):
 
     IMPORTANT:
     - Always reply ONLY in {language}.
-    - Do NOT use any other language.
+    - Do not use any other language.
     - Keep answers clear and short.
     """
 
@@ -36,6 +36,7 @@ def generate_reply(user_input, language):
         return result["choices"][0]["message"]["content"]
     else:
         return f"Error: {result}"
+        
 def speak(text):
     tts = gTTS(text=text)
     tts.save("reply.mp3")
@@ -84,21 +85,18 @@ st.markdown("<p style='text-align: center;'>Real-time AI assistant with multilin
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-language = st.selectbox(
-    "🌐 Select reply language",
-    [
-        "English",
-        "Tamil",
-        "Hindi",
-        "Telugu",
-        "Spanish",
-        "French",
-        "German",
-        "Malayalam",
-        "Kannada",
-        "Chinese"
-    ]
-)
+languages = [
+    "English", "Tamil", "Hindi", "Telugu", "Spanish",
+    "French", "German", "Malayalam", "Kannada", "Chinese",
+    "Japanese", "Korean", "Arabic", "Russian", "Portuguese",
+    "Italian", "Bengali", "Marathi", "Gujarati", "Punjabi",
+    "Urdu", "Thai", "Vietnamese", "Indonesian", "Turkish",
+    "Dutch", "Greek", "Polish", "Swedish", "Norwegian",
+    "Danish", "Finnish", "Czech", "Hungarian", "Romanian",
+    "Ukrainian", "Hebrew", "Malay", "Filipino"
+]
+
+language = st.selectbox("🌐 Select reply language", sorted(languages))
 user_input = st.text_input("Enter your message (Any Language):")
 
 if st.button("Send") and user_input:
@@ -116,6 +114,7 @@ for sender, message in st.session_state.messages:
         st.markdown(f'<div class="user-bubble">🧑 {message}</div>', unsafe_allow_html=True)
     else:
         st.markdown(f'<div class="ai-bubble">🤖 {message}</div>', unsafe_allow_html=True)
+
 
 
 
