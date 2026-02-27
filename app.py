@@ -14,11 +14,11 @@ headers = {
 
 def generate_reply(user_input):
     payload = {
-        "model": "llama-3.1-8b-instant",
-        "messages": [
-            {"role": "user", "content": user_input}
-        ]
-    }
+    "model": "llama-3.1-8b-instant",
+    "messages": [
+        {"role": "user", "content": user_input}
+    ]
+}
 
     response = requests.post(API_URL, headers=headers, json=payload)
     result = response.json()
@@ -44,4 +44,5 @@ if st.button("Send"):
 
         audio_file = speak(reply)
         st.audio(audio_file)
+
 
