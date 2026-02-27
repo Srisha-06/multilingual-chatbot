@@ -14,7 +14,7 @@ headers = {
 
 def generate_reply(user_input):
     payload = {
-        "model": "llama3-8b-8192",
+        "model": "llama-3.1-8b-instant",
         "messages": [
             {"role": "user", "content": user_input}
         ]
@@ -44,3 +44,4 @@ if st.button("Send"):
 
         audio_file = speak(reply)
         st.audio(audio_file)
+
