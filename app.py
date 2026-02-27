@@ -42,7 +42,45 @@ def speak(text):
     tts.save("reply.mp3")
     return "reply.mp3"
 
-st.title("🌍 Multilingual AI Voice Chatbot")
+st.set_page_config(
+    page_title="Multilingual AI Chatbot",
+    page_icon="🌍",
+    layout="centered"
+)
+
+st.markdown("""
+<style>
+.main {
+    background-color: #f5f7fa;
+}
+
+.chat-container {
+    padding: 10px;
+}
+
+.user-bubble {
+    background-color: #0084ff;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin-bottom: 8px;
+    text-align: right;
+}
+
+.ai-bubble {
+    background-color: #e4e6eb;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin-bottom: 8px;
+    text-align: left;
+}
+</style>
+""", unsafe_allow_html=True)
+
+#st.title("🌍 Multilingual AI Voice Chatbot")
+st.markdown("<h1 style='text-align: center; color: #2c3e50;'>🌍 Multilingual AI Voice Chatbot</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'>Real-time AI assistant with multilingual & voice support</p>", unsafe_allow_html=True)
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -61,6 +99,6 @@ if st.button("Send") and user_input:
 
 for sender, message in st.session_state.messages:
     if sender == "You":
-        st.markdown(f"🧑 **You:** {message}")
+        st.markdown(f'<div class="user-bubble">🧑 {message}</div>', unsafe_allow_html=True)
     else:
-        st.markdown(f"🤖 **AI:** {message}")
+        st.markdown(f'<div class="ai-bubble">🤖 {message}</div>', unsafe_allow_html=True)
