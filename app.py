@@ -1,11 +1,8 @@
 import streamlit as st
 import requests
 from gtts import gTTS
-from googletrans import Translator
 
-# Load API key
 API_KEY = st.secrets["GROQ_API_KEY"]
-
 API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 headers = {
@@ -13,20 +10,22 @@ headers = {
     "Content-Type": "application/json"
 }
 
-translator = Translator()
-
 def generate_reply(user_input):
-    # Detect language
-    detected = translator.detect(user_input)
-    user_lang = detected.lang
 
-    # Translate user input to English
-    translated_input = translator.translate(user_input, dest="en").text
+    system_prompt = """
+    You are a multilingual assistant.
+    1. Detect the language of the user's message.
+    2. Respond in the SAME language.
+    3. If the user asks in Tamil, reply in Tamil.
+    4. If Hindi, reply in Hindi.
+    5. If English, reply in English.
+    """
 
     payload = {
         "model": "llama-3.1-8b-instant",
         "messages": [
-            {"role": "user", "content": translated_input}
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_input}
         ]
     }
 
@@ -34,11 +33,7 @@ def generate_reply(user_input):
     result = response.json()
 
     if "choices" in result:
-        ai_reply_en = result["choices"][0]["message"]["content"]
-
-        # Translate reply back to user's language
-        final_reply = translator.translate(ai_reply_en, dest=user_lang).text
-        return final_reply
+        return result["choices"][0]["message"]["content"]
     else:
         return f"Error: {result}"
 
