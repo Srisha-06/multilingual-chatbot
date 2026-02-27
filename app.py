@@ -86,7 +86,18 @@ if "messages" not in st.session_state:
 
 language = st.selectbox(
     "🌐 Select reply language",
-    ["English", "Tamil", "Hindi", "Telugu", "Spanish"]
+    [
+        "English",
+        "Tamil",
+        "Hindi",
+        "Telugu",
+        "Spanish",
+        "French",
+        "German",
+        "Malayalam",
+        "Kannada",
+        "Chinese"
+    ]
 )
 user_input = st.text_input("Enter your message (Any Language):")
 
@@ -105,6 +116,7 @@ for sender, message in st.session_state.messages:
         st.markdown(f'<div class="user-bubble">🧑 {message}</div>', unsafe_allow_html=True)
     else:
         st.markdown(f'<div class="ai-bubble">🤖 {message}</div>', unsafe_allow_html=True)
+
 
 
 
